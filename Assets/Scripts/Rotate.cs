@@ -2,7 +2,37 @@ using UnityEngine;
 
 public class Rotate : MonoBehaviour
 {
-    [SerializeField] private Vector2 _speed = new(20, 20);
+    [SerializeField] private Vector2 _speed = new(50, 50);
+    [SerializeField] private int _yMinLimit = -80;
+    [SerializeField] private int _yMaxLimit = 80;
+    [SerializeField] private float _rotationDamping = 5.0f;
+
+    private float _xDeg = 0.0f;
+    private float _yDeg = 0.0f;
+    private Quaternion _currentRotation;
+    private Quaternion _desiredRotation;
+    private Quaternion _rotation;
+
+    private float YDeg
+    {
+        get => _yDeg;
+        set => _yDeg = ExtraMath.ClampAngle(value, _yMinLimit, _yMaxLimit);
+    }
+
+    void Start()
+    {
+        Initialize();
+    }
+
+    private void Initialize()
+    {
+        _rotation = transform.rotation;
+        _currentRotation = transform.rotation;
+        _desiredRotation = transform.rotation;
+
+        _xDeg = Vector3.Angle(Vector3.right, transform.right);
+        YDeg = Vector3.Angle(Vector3.up, transform.up);
+    }
 
     private void LateUpdate()
     {
@@ -10,12 +40,17 @@ public class Rotate : MonoBehaviour
         {
             Vector2 touchposition = Input.GetTouch(0).deltaPosition;
 
-            float x = -touchposition.x * _speed.x * Time.deltaTime;
-            float y = -touchposition.y * _speed.y * Time.deltaTime;
-
-            Transform figure = transform.GetChild(0).GetChild(0);
-            figure.Rotate(y, x, 0);
+            _xDeg -= touchposition.x * _speed.x * 0.002f;
+            YDeg -= touchposition.y * _speed.y * 0.002f;
         }
+
+        Transform figure = transform.GetChild(0).GetChild(0);
+
+        _desiredRotation = Quaternion.Euler(YDeg, _xDeg, 0);
+        _currentRotation = figure.rotation;
+        _rotation = Quaternion.Lerp(_currentRotation, _desiredRotation, Time.deltaTime * _rotationDamping);
+
+        figure.rotation = _rotation;
     }
 
     private static bool IsSingleTouch() => Input.touchCount == 1;
