@@ -115,6 +115,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Deer 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5195815641568710313, guid: 5b053cf02936a794bb091e0e91e513ab,
+        type: 3}
+      propertyPath: m_TagString
+      value: Figure
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b053cf02936a794bb091e0e91e513ab, type: 3}
