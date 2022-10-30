@@ -4,11 +4,23 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Snow.unity
+    guid: 205a161203a74dc45aa31e010787e970
   m_configObjects:
-    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 50f434ea01a6d4f4c85a86430eab6ff2, type: 2}
-    UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 4c16e2dc7209a554a860745e4626a35c, type: 2}
-    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: b3bf59d389b6af546a38b35eb016b209, type: 2}
-    com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000, guid: 174b7447f8eb0e146aadf41dda5f7efb, type: 2}
-    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: f5d32ddba1d82344da89d7aff7fcadd2, type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: bf6627cadffee6644afb3598f4e95143, type: 2}
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 8ff793832d448a744992264d9b874446,
+      type: 2}
+    UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: a200d3c9690ef5e438aed5509635860b,
+      type: 2}
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: d903f226c4b552d47af58dcc81049656,
+      type: 2}
+    com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000,
+      guid: 5b9c3df3eb9273645952fcac8e0207ab, type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000,
+      guid: b639712c92370e449a2757800b102e29, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: ac73234c4632e5e4d81134c12005c1b3,
+      type: 2}
