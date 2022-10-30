@@ -5,6 +5,16 @@ public class Zoom : MonoBehaviour
 {
     [SerializeField] private float _speed;
 
+    [Header("Zoom")]
+    [SerializeField] private float _zoomMinClamp;
+    [SerializeField] private float _zoomMaxClamp;
+    [SerializeField] private float _zoomSmooth;
+
+    [Header("Position")]
+    [SerializeField] private float _positionMinClamp;
+    [SerializeField] private float _positionMaxClamp;
+    [SerializeField] private float _positionSmooth;
+
     private float _distance;
     private float _deltaDistance;
     private float _zoom;
@@ -29,20 +39,20 @@ public class Zoom : MonoBehaviour
 
             _distance = Vector3.Distance(first.position, second.position);
 
-            _zoom = Mathf.Clamp(_deltaDistance, -1.5f, 1.5f) * _speed * Time.deltaTime;
+            _zoom = Mathf.Clamp(_deltaDistance, _zoomMinClamp, _zoomMaxClamp) * _speed * Time.deltaTime;
         }
 
         UpdateZoom();
         UpdatePosition();
 
         Vector3 pos = _camera.transform.position;
-        pos.x = Mathf.Clamp(pos.x, -4.5f, 0);
+        pos.x = Mathf.Clamp(pos.x, _positionMinClamp, _positionMaxClamp);
         _camera.transform.position = pos;
     }
 
     private void UpdateZoom()
     {
-        _zoom = Mathf.Lerp(_zoom, 0, 5 * Time.deltaTime);
+        _zoom = Mathf.Lerp(_zoom, 0, _zoomSmooth * Time.deltaTime);
     }
 
     private void UpdatePosition()
@@ -50,8 +60,6 @@ public class Zoom : MonoBehaviour
         var current = _camera.transform.position;
         var target = _camera.transform.position + Vector3.right * _zoom;
 
-        Debug.Log(current.magnitude);
-
-        _camera.transform.position = Vector3.Lerp(current, target, 5 * Time.deltaTime);
+        _camera.transform.position = Vector3.Lerp(current, target, _positionSmooth * Time.deltaTime);
     }
 }
