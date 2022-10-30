@@ -1,63 +1,57 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Zoom : MonoBehaviour
 {
-    public Transform Target;
-    [SerializeField] private float _maxDistance = 20;
-    [SerializeField] private float _minDistance = .6f;
-    [SerializeField] private float _zoomRate = 10.0f;
-    [SerializeField] private float _zoomDamping = 5.0f;
-    [SerializeField] private float _sensitivity = 0.0025f;
+    [SerializeField] private float _speed;
 
-    private float _currentDistance;
-    private float _desiredDistance;
-    private Vector3 _position;
+    private float _distance;
+    private float _deltaDistance;
+    private float _zoom;
 
-    private float DesiredDistance
-    {
-        get => _desiredDistance;
-        set => _desiredDistance = Mathf.Clamp(value, _minDistance, _maxDistance);
-    }
+    private Camera _camera;
 
     private void Start()
     {
-        Initialize();
-    }
-
-    public void Initialize()
-    {
-        var distance = Vector3.Distance(transform.position, Target.position);
-
-        _currentDistance = distance;
-        DesiredDistance = distance;
-
-        _position = transform.position;
+        _camera = Camera.main;
     }
 
     void LateUpdate()
     {
         if (Input.touchCount == 2)
         {
-            var firstTouch = Input.GetTouch(0);
-            var secondTouch = Input.GetTouch(1);
+            var first = Input.GetTouch(0);
+            var second = Input.GetTouch(1);
 
-            var firstTouchPreviousPosition = firstTouch.position - firstTouch.deltaPosition;
-            var secondTouchPreviousPosition = secondTouch.position - secondTouch.deltaPosition;
+            float currentDistance = Vector3.Distance(first.position, second.position);
 
-            var currentMagnitude = (firstTouch.position - secondTouch.position).magnitude;
-            var previousMagnitude = (firstTouchPreviousPosition - secondTouchPreviousPosition).magnitude;
+            _deltaDistance = _distance - currentDistance;
 
-            var deltaMagnitude = previousMagnitude - currentMagnitude;
+            _distance = Vector3.Distance(first.position, second.position);
 
-            DesiredDistance += deltaMagnitude * Time.deltaTime * _zoomRate * _sensitivity * Mathf.Abs(DesiredDistance);
+            _zoom = Mathf.Clamp(_deltaDistance, -1.5f, 1.5f) * _speed * Time.deltaTime;
         }
 
-        _currentDistance = Mathf.Lerp(_currentDistance, DesiredDistance, Time.deltaTime * _zoomDamping);
+        UpdateZoom();
+        UpdatePosition();
 
-        _position = Target.position - (Vector3.forward * _currentDistance);
+        Vector3 pos = _camera.transform.position;
+        pos.x = Mathf.Clamp(pos.x, -4.5f, 0);
+        _camera.transform.position = pos;
+    }
 
-        Vector3 s = new(transform.position.x, transform.position.y, _position.z);
+    private void UpdateZoom()
+    {
+        _zoom = Mathf.Lerp(_zoom, 0, 5 * Time.deltaTime);
+    }
 
-        transform.position = s;
+    private void UpdatePosition()
+    {
+        var current = _camera.transform.position;
+        var target = _camera.transform.position + Vector3.right * _zoom;
+
+        Debug.Log(current.magnitude);
+
+        _camera.transform.position = Vector3.Lerp(current, target, 5 * Time.deltaTime);
     }
 }
